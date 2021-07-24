@@ -2,12 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-require("dotenv").config();
+const user = require("./src/routes/user");
 
-const { PORT } = require("./config");
+const { PORT, mongoURI } = require("./config");
 const app = express();
 
-mongoose.connect(process.env.mongoURI, {
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -21,11 +21,8 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use("/user", user);
 
-app.get("/", (req, res) => {
-  res.json({ id: 1, text: "hello" });
-});
-
-app.listen(process.env.PORT || 8888, () => {
+app.listen(PORT || 8888, () => {
   console.log(`Server runned on port ${PORT}. URL: http://localhost:${PORT}/`);
 });
