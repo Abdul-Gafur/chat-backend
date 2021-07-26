@@ -8,7 +8,7 @@ const UserController = {
       const newUser = await user.save();
       res.json({ message: `Пользователь ${newUser.username} был успешно создан!` });
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ ...err, message: "Пользователь с таким именем уже сущесвует!" });
     }
   },
 };

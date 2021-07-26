@@ -13,9 +13,8 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre("save", { document: true }, (next) => {
-  console.log(this.password);
-  const hash = hashSync(this.password, 10);
+UserSchema.pre("save", function (next) {
+  const hash = hashSync(`this.password`, 10);
 
   this.password = hash;
   next();
