@@ -23,6 +23,10 @@ app.use(
 app.use(bodyParser.json());
 app.use("/user", user);
 
+app.get("/", (req, res) => {
+  return res.send("Hello");
+});
+
 app.listen(PORT || 8888, () => {
   console.log(`Server runned on port ${PORT}. URL: http://localhost:${PORT}/`);
 });
