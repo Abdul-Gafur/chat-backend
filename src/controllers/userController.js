@@ -6,10 +6,10 @@ const UserController = {
       const { username, password } = req.body;
       const user = new UserModel({ username, password });
 
-      const newUser = await user.save();
+      await user.save();
       res.json({
-        id: newUser._id,
-        message: `Пользователь ${newUser.username} был успешно создан!`,
+        id: user._id,
+        message: `Ok`,
       });
     } catch (err) {
       if (err.name === "MongoError" && err.code === 11000) {
@@ -25,9 +25,9 @@ const UserController = {
       const { id } = req.body;
       const user = await UserModel.findByIdAndDelete(id);
       if (user) {
-        return res.status(200).json({ message: "Пользователь был удален!" });
+        return res.status(200).json({ message: "Ok" });
       }
-      return res.status(400).json({ message: "Пользователь не найден!" });
+      return res.status(400).json({ message: "The user was not found" });
     } catch (err) {
       res.status(500).json(err);
     }

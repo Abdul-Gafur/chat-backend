@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const user = require("./src/routes/user");
+const message = require("./src/routes/message");
+const chat = require("./src/routes/chat");
 
 const { PORT, mongoURI } = require("./config");
 const app = express();
@@ -22,6 +24,8 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use("/user", user);
+app.use("/message", message);
+app.use("/chat", chat);
 
 app.get("/", (req, res) => {
   return res.send("Hello");
