@@ -5,12 +5,13 @@ const UserSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
+      required: "Username is required",
       unique: true,
     },
     password: {
       type: String,
       required: true,
+      validate: [(value) => value.length > 7, "The password must contain at least 8 characters"],
     },
   },
   { timestamps: true }
