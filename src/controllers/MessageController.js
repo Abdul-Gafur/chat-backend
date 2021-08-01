@@ -4,7 +4,7 @@ const MessageController = {
   create: async (req, res) => {
     try {
       const { text, userId } = req.body;
-      const message = new MessageModel({ text, user: userId });
+      const message = await new MessageModel({ text, user: userId });
       await message.save();
 
       res.status(200).json({ id: message._id, userId: message.user, text: message.text });
@@ -25,6 +25,22 @@ const MessageController = {
         });
     } catch (err) {
       res.status(400).json(err);
+    }
+  },
+  socket: async ({ type, text, user }, ws) => {
+    try {
+      switch (type) {
+        case "message":
+          const message = await new MessageModel({ text, user }).save();
+
+          ws.send(JSON.stringify(message.text));
+          break;
+
+        default:
+          break;
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
 };
