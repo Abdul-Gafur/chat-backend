@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { create, remove } = require("../controllers/UserController");
+const { create, remove, login } = require("../controllers/UserController");
 
 const router = Router();
 
@@ -8,5 +8,6 @@ router
   .get((req, res) => res.send("user"))
   .post(create)
   .delete(remove);
+router.route("/login").post(login);
 
 module.exports = router;

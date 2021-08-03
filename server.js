@@ -8,11 +8,12 @@ const user = require("./src/routes/user");
 const message = require("./src/routes/message");
 const chat = require("./src/routes/chat");
 const { socket } = require("./src/controllers/MessageController");
+const checkAuth = require("./src/middlewares/checkAuth");
+require("dotenv").config();
 
-const { PORT, mongoURI } = require("./config");
 const app = express();
 
-mongoose.connect(mongoURI, {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -25,6 +26,7 @@ app.use(
     extended: true,
   })
 );
+app.use(checkAuth);
 app.use(bodyParser.json());
 app.use("/user", user);
 app.use("/message", message);
@@ -40,6 +42,6 @@ wss.on("connection", (ws) => {
   ws.send(JSON.stringify({ message: "Ok" }));
 });
 
-server.listen(PORT || 8888, () => {
-  console.log(`Server runned on port ${PORT}. URL: http://localhost:${PORT}/`);
+server.listen(process.env.PORT || 8888, () => {
+  console.log(` URL: http://localhost:${process.env.PORT || 8888}/`);
 });

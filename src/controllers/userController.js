@@ -1,4 +1,6 @@
 const { UserModel } = require("../models/UserModel");
+const { createToken } = require("../utils");
+const { compareSync } = require("bcrypt");
 
 const UserController = {
   create: async (req, res) => {
@@ -30,6 +32,30 @@ const UserController = {
       return res.status(400).json({ message: "The user was not found" });
     } catch (err) {
       res.status(500).json(err);
+    }
+  },
+
+  login: async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await UserModel.findOne({ username });
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      const isCorrectPassword = await compareSync(password, user.password);
+      if (!isCorrectPassword) {
+        return res.status(401).json({ message: "Invalid password" });
+      }
+
+      const token = createToken(user);
+      res.status(200).json({
+        username: user.username,
+        token,
+        expiresIn: process.env.JWT_EXPIRATION_DELTA,
+      });
+    } catch (err) {
+      return res.status(500).json(err);
     }
   },
 };
